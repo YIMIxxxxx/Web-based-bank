@@ -4,7 +4,7 @@ from django.db import models
 
 
 class AccntInfo(models.Model):
-    accnt_num = models.IntegerField(db_column='accnt_num', primary_key=True)
+    accnt_num = models.BigAutoField(db_column='accnt_num', primary_key=True)
     user_name = models.CharField(db_column='user_name', max_length=45)
     user_passwd = models.CharField(db_column='user_passwd',max_length=45)
     bal = models.IntegerField(db_column='bal')
@@ -26,7 +26,7 @@ class StaffInfo(models.Model):
 
 
 class TransInfo(models.Model):
-    trans_num = models.IntegerField(db_column='trans_num', primary_key=True)
+    trans_num = models.BigAutoField(db_column='trans_num', primary_key=True)
     source_accnt = models.IntegerField(db_column='source_accnt')
     dest_accnt = models.IntegerField(db_column='dest_accnt')
     amnt = models.IntegerField(db_column='amnt')

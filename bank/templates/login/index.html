@@ -1,13 +1,79 @@
-<!DOCTYPE html>
+{% load static %}
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>首页</title>
-</head>
-<body>
-<h1>{{ request.session.user_name }}!  欢迎回来！</h1>
-<p>
-    <a href="/logout/">登出</a>
-</p>
-</body>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- 上述meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="{% static 'login/css/index.css' %}" rel="stylesheet"/>
+        <title>客户主页</title>
+    </head>
+
+<script type="text/javascript">
+
+    function display(id){
+        var traget=document.getElementById(id);
+        if(traget.style.display==="none"){
+            traget.style.display="";
+        }else{
+            traget.style.display="none";
+      }
+   }
+</script>
+
+    <body>
+        <h1 class="text-center">{{ request.session.user_name }}! 欢迎登录!</h1>
+        <div class="container">
+            <div style="margin-top: 80px">
+                <button type="button" class="btn btn-primary" onclick="display('bal');">查询余额</input>
+                <div id="bal" style="display:none">
+                    <h5>当前余额：{{ request.session.bal }}</h5>
+                </div>
+            </div>
+
+            <div class="col">
+                <form class="form-trans" action="/index/" method="post">
+                    {% if message %}
+                        <div class="alert alert-warning">{{ message }}</div>
+                    {% endif %}
+                    {% csrf_token %}
+                    <h3 class="text-center">转账</h3>
+                    <div>
+                        <h5>源账户：{{ request.session.accnt_num }}</h5>
+                    </div>
+
+                    <div class="form-group">
+                        {{ trans_form.dest_accnt.label_tag }}
+                        {{ trans_form.dest_accnt}}
+                    </div>
+                    <div class="form-group">
+                        {{ trans_form.amnt.label_tag }}
+                        {{ trans_form.amnt }}
+                    </div>
+
+                    <div>
+                        <button type="submit" class="btn btn-primary float-right">提交转账申请</button>
+                    </div>
+                </form>
+            </div>
+
+            <p>
+                <a href="/logout/">登出</a>
+            </p>
+        </div> <!-- /container -->
+
+
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        {#    以下三者的引用顺序是固定的#}
+        <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+        <script src="https://cdn.bootcss.com/popper.js/1.15.0/umd/popper.js"></script>
+        <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    </body>
 </html>
+

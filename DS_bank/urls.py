@@ -19,6 +19,7 @@ from bank import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.toindex),
     path('index/', views.index),
     path('login/', views.login),
     path('staff_login/', views.staff_login),
