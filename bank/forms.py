@@ -13,7 +13,7 @@ class TransForm(forms.Form):
     amnt = forms.IntegerField(label="转账金额", widget=forms.NumberInput(
         attrs={'class': 'form-control', 'placeholder': "amnt"}))
 
-class DelForm(forms.Form):
+class DelForm(forms.Form):  # 用于销户
     del_accnt = forms.IntegerField(label="账号", widget=forms.NumberInput(
         attrs={'class': 'form-control', 'placeholder': "del_accnt",'autofocus': ''}))
     password = forms.CharField(label="密码", max_length=45, widget=forms.PasswordInput(

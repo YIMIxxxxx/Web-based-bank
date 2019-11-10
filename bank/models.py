@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 
 class AccntInfo(models.Model):
     accnt_num = models.BigAutoField(db_column='accnt_num', primary_key=True)

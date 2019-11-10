@@ -3,8 +3,6 @@ from django.shortcuts import redirect
 from . import models
 from . import forms
 
-# Create your views here.
-
 
 def index(request):
     # 客户主页（查余额/转账）
@@ -136,18 +134,18 @@ def manage(request):
     if request.method == "POST":
         add_form = forms.UserForm(request.POST)
         del_form = forms.DelForm(request.POST)
-        if add_form.is_valid():
+        if add_form.is_valid():     # 开户
             user_name = add_form.cleaned_data.get('username')
             user_passwd = add_form.cleaned_data.get('password')
             user = models.AccntInfo(
                 user_name=user_name, user_passwd=user_passwd, bal=0, is_valid=1)
             user.save()
-            message = '添加成功！'
+            message = '添加成功！accnt_num=' + str(user.accnt_num)
             add_form = forms.UserForm()
             del_form = forms.DelForm()
             return render(request, 'login/manage.html', locals())
 
-        if del_form.is_valid():
+        if del_form.is_valid():     # 销户
             del_accnt = del_form.cleaned_data.get('del_accnt')
             del_passwd = del_form.cleaned_data.get('password')
 
@@ -163,7 +161,7 @@ def manage(request):
             if not del_user.user_passwd == del_passwd:
                 message2 = '密码错误！'
                 return render(request, 'login/manage.html', locals())
-            # 销户
+            # 修改数据库
             del_user.is_valid = 0
             del_user.save()
             message2 = '销户成功！'
