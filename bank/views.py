@@ -132,7 +132,48 @@ def manage(request):
     if not request.session.get('is_staff', None):   #权限隔离
         request.session.flush()
         return redirect('/staff_login/')
-    return render(request, 'login/manage.html')
+
+    if request.method == "POST":
+        add_form = forms.UserForm(request.POST)
+        del_form = forms.DelForm(request.POST)
+        if add_form.is_valid():
+            user_name = add_form.cleaned_data.get('username')
+            user_passwd = add_form.cleaned_data.get('password')
+            user = models.AccntInfo(
+                user_name=user_name, user_passwd=user_passwd, bal=0, is_valid=1)
+            user.save()
+            message = '添加成功！'
+            add_form = forms.UserForm()
+            del_form = forms.DelForm()
+            return render(request, 'login/manage.html', locals())
+
+        if del_form.is_valid():
+            del_accnt = del_form.cleaned_data.get('del_accnt')
+            del_passwd = del_form.cleaned_data.get('password')
+
+            try:
+                # 查询数据库中的销户账户是否存在
+                del_user = models.AccntInfo.objects.get(accnt_num=del_accnt)
+            except:
+                message2 = '账户不存在！'
+                return render(request, 'login/manage.html', locals())
+            if del_user.is_valid == 0:  #已销户
+                message2 = '账户不存在！'
+                return render(request, 'login/manage.html', locals())
+            if not del_user.user_passwd == del_passwd:
+                message2 = '密码错误！'
+                return render(request, 'login/manage.html', locals())
+            # 销户
+            del_user.is_valid = 0
+            del_user.save()
+            message2 = '销户成功！'
+            del_form = forms.DelForm()
+            add_form = forms.UserForm()
+            return render(request, 'login/manage.html', locals())
+
+    add_form = forms.UserForm()
+    del_form = forms.DelForm()
+    return render(request, 'login/manage.html', locals())
 
 
 def logout(request):
